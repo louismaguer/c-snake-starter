@@ -29,25 +29,47 @@ void backgroundSetup(int nx, int ny, int bg[]){
 
 void add_snake(Snake* snake,int bg[], int nx, int ny){
     //// TODO
+    int len = snake->length;
+    for(int i=0; i<len; i++){
+        int x = snake->body[i].x;
+        int y = snake->body[i].y;
+        int j = x + y*nx;
+        bg[j] = 1;
+    }
 }
 
 void remove_snake(Snake* snake, int bg[],int nx,int ny){
     ///// TODO
+    int len = snake->length;
+    for(int i=0; i<len; i++){
+        int x = snake->body[i].x;
+        int y = snake->body[i].y;
+        int j = x + y*nx;
+        bg[j] = -1;
+    }
 }
 
 void snake_movement(char k, int dxdy[2]){
     if(k=='d'||k=='6'){
         // Right                                                                      
         // TODO
+        dxdy[0] = 1;
+        dxdy[1] = 0;
     }else if(k=='q'||k=='4'){
         // Left                                                                       
         // TODO
+        dxdy[0] = -1;
+        dxdy[1] = 0;
     }else if(k=='s'||k=='2'){
         // Down                                                                        
         // TODO
+        dxdy[0] = 0;
+        dxdy[1] = 1;
     }else if(k=='z'||k=='8'){
         // Up                                                                      
         // TODO
+        dxdy[0] = 0;
+        dxdy[1] = -1;
     }
 }
 
@@ -56,6 +78,9 @@ bool verifyBorder(Snake* snake, int nx, int ny){
     // Return false if the snake is out of bounds
     //        true otherwise
     // TODO
+    if(snake->body[0].x < 0 || snake->body[0].x >= nx || snake->body[0].y < 0 || snake->body[0].y >= ny){
+        return false;
+    }
     return true;
 }
 
@@ -63,11 +88,21 @@ bool verifyBorder(Snake* snake, int nx, int ny){
 void setupSnake(Snake* snake, int init_size){
     // Initialize the snake with the given initial size
     // TODO 
+    snake->length = init_size;
+    for(int i = 0; i < init_size; i++){
+        snake->body[i].x = init_size - i;
+        snake->body[i].y = 13;
+    }
 }
 
 void update_snake_coordinates(struct Snake* snake, int dxdy[2]){
     // Update the snake coordinates based on the current direction
     // TODO
+    for(int i = snake->length - 1; i > 0; i--){
+        snake->body[i] = snake->body[i-1];
+    }
+    snake->body[0].x += dxdy[0];
+    snake->body[0].y += dxdy[1];
 }
 
 void startGame(int lap, int nx, int ny, Snake* snake, int bg[]){
